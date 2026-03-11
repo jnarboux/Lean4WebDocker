@@ -8,9 +8,13 @@ RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -
     elan toolchain install $(curl https://raw.githubusercontent.com/leanprover-community/mathlib/master/leanpkg.toml | grep lean_version | awk -F'"' '{print $2}') && \
     elan default stable
 
-RUN git clone --recurse-submodules https://github.com/leanprover-community/lean4web.git
-RUN cd lean4web && npm install && npm run build
+# Cloning YalepWeb repository  freezing at Yalep v0.1.2
+RUN git clone git@gricad-gitlab.univ-grenoble-alpes.fr:yalep/yalepweb.git ;\
+    cd yalepweb ;\
+    git checkout v0.1.2 ;\
+    rm -rf .git
+RUN cd yalepweb && npm install && npm run build
 EXPOSE 8080
 ENV PORT=8080
-CMD cd lean4web && npm run production
+CMD cd yalepweb && npm run production
 
